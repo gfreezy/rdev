@@ -302,18 +302,19 @@ pub use crate::windows::grab as _grab;
 ///     }
 /// }
 /// fn main(){
+///     let blocking = true;
 ///     // This will block.
-///     if let Err(error) = grab(callback) {
+///     if let Err(error) = grab(callback, true) {
 ///         println!("Error: {:?}", error)
 ///     }
 /// }
 /// ```
 #[cfg(any(feature = "unstable_grab"))]
-pub fn grab<T>(callback: T) -> Result<(), GrabError>
+pub fn grab<T>(callback: T, blocking: bool) -> Result<(), GrabError>
 where
     T: Fn(Event) -> Option<Event> + 'static,
 {
-    _grab(callback)
+    _grab(callback, blocking)
 }
 
 #[cfg(test)]
