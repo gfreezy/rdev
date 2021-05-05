@@ -30,7 +30,7 @@ unsafe extern "C" fn raw_callback(
 }
 
 #[link(name = "Cocoa", kind = "framework")]
-pub fn grab<T>(callback: T) -> Result<(), GrabError>
+pub fn grab<T>(callback: T, blocking: bool) -> Result<(), GrabError>
 where
     T: FnMut(Event) -> Option<Event> + 'static,
 {
@@ -57,7 +57,9 @@ where
         CFRunLoopAddSource(current_loop, _loop, kCFRunLoopCommonModes);
 
         CGEventTapEnable(tap, true);
-        CFRunLoopRun();
+        if blocking {
+            CFRunLoopRun();
+        }
     }
     Ok(())
 }
